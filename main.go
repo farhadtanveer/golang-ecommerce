@@ -1,18 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
-
-func helloHandler(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintln(w, "Hello, World!")
-}
-
-func aboutHandler(w http.ResponseWriter, r *http.Request){
-	fmt.Fprintln(w, "I am Tanveer, a software developer with a passion for building web applications.")
-}
 
 type Product struct {
 	ID    int          `json:"id"`
@@ -24,26 +15,29 @@ type Product struct {
 
 var productList []Product
 
-func getProducts(w http.ResponseWriter, r *http.Request){
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	if r.Method != "GET" {
-		http.Error(w, "Please give me get request", 400)
+func handleCors(w http.ResponseWriter){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("content-Type", "application/json")
+}
+
+func handlePreflightReq(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		handleCors(w) // Set CORS headers
+		w.WriteHeader(200)
 		return
 	}
-
-	encoder :=json.NewEncoder(w)
-	encoder.Encode(productList)
 }
 
 func main() {
 	// This is the entry point of the application.
 	// You can initialize your application here.
 	mux := http.NewServeMux()
-	mux.HandleFunc("/hello", helloHandler)
-	mux.HandleFunc("/about", aboutHandler)
-	mux.HandleFunc("/products", getProducts)
+	mux.Handle("GET /products", corsMiddleware(http.HandlerFunc(getProducts)))
+	mux.HandleFunc("POST /create-product", http.HandlerFunc(createProduct))
+
 	fmt.Println("Server is running on port 8080")
 
 	err := http.ListenAndServe(":8080", mux) // failed to start the server
@@ -69,4 +63,17 @@ func init(){
 	}
 
 	productList = append(productList, prd1, prd2)
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	handleCors := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, PATCH, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("content-Type", "application/json")
+		
+		next.ServeHTTP(w, r) // Call the next handler in the chain
+	}
+	handler := http.HandlerFunc(handleCors)
+	return handler
 }
