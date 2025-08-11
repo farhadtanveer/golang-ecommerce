@@ -1,11 +1,11 @@
-package main
+package util
 
 import (
 	"encoding/json"
 	"net/http"
 )
 
-func sendData(w http.ResponseWriter, data interface{}, statusCode int) {
+func SendData(w http.ResponseWriter, data interface{}, statusCode int) {
 	w.WriteHeader(statusCode)
 	encoder := json.NewEncoder(w)
 	encoder.Encode(data)
