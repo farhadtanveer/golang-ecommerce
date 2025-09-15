@@ -18,8 +18,7 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error decoding JSON:", err)
 	}
 
-	newProduct.ID = len(database.ProductList) + 1 // Assign a new ID based on the current length of the product list
-	database.ProductList = append(database.ProductList, newProduct)
+	createdProduct := database.Store(newProduct)
 
-	util.SendData(w, newProduct, 200) 
+	util.SendData(w, createdProduct, 200) 
 }
