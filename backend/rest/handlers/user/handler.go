@@ -3,6 +3,6 @@ package user
 type Handler struct {
 }
 
-func Newhandler() *Handler {
+func NewHandler() *Handler {
 	return &Handler{}
 }

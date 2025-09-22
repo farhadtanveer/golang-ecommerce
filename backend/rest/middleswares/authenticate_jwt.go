@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"ecommerce/config"
 	"net/http"
 	"strings"
 
@@ -9,7 +8,7 @@ import (
 )
 
 // AuthenticateJWT validates JWT from Authorization header
-func AuthenticateJWT(next http.Handler) http.Handler {
+func (m *Middleswares) AuthenticateJWT(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get Authorization header
 		authHeader := r.Header.Get("Authorization")
@@ -28,8 +27,7 @@ func AuthenticateJWT(next http.Handler) http.Handler {
 		tokenString := parts[1]
 
 		// Get secret key from config
-		cnf := config.GetConfig()
-		secretKey := []byte(cnf.JwtSecretKey)
+		secretKey := []byte(m.cnf.JwtSecretKey)
 
 		// Parse and validate token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
