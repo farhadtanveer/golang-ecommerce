@@ -7,9 +7,6 @@ type User struct {
 	Email       string `json:"email"`
 	Password    string `json:"password"`
 	IsShopOwner bool   `json:"is_shop_owner"`
-	// Address   string `json:"address"`
-	// Phone     string `json:"phone"`
-	// Role      string `json:"role"` // e.g., "customer", "admin"
 }
 
 var users []User

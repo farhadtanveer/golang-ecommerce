@@ -13,8 +13,8 @@ func Start(cnf config.Config) {
 	// Initialize the HTTP server and middleware manager
 	manager := middleware.NewManager()
 	manager.Use(
+		middleware.Preflight,
 		middleware.Cors, 
-		middleware.Preflight, 
 		middleware.Logger,
 	)
 
