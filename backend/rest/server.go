@@ -2,6 +2,8 @@ package rest
 
 import (
 	"ecommerce/config"
+	"ecommerce/rest/handlers/product"
+	"ecommerce/rest/handlers/user"
 	middleware "ecommerce/rest/middleswares"
 	"fmt"
 	"net/http"
@@ -9,7 +11,25 @@ import (
 	"strconv"
 )
 
-func Start(cnf config.Config) {
+type Server struct {
+	cnf 		config.Config
+	productHandler *product.Handler
+	userHandler    *user.Handler
+}
+
+func NewServer(
+	cnf config.Config,
+	productHandler *product.Handler, 
+	userHandler *user.Handler,
+) *Server {
+	return &Server{
+		cnf:            cnf,
+		productHandler: productHandler,
+		userHandler:    userHandler,
+	}
+}
+
+func (server *Server) Start() {
 	// Initialize the HTTP server and middleware manager
 	manager := middleware.NewManager()
 	manager.Use(
@@ -22,10 +42,12 @@ func Start(cnf config.Config) {
 	wrappedMux := manager.WrapMux(mux)
 
 	// Initialize routes
-	initRoutes(mux, manager)
+	// initRoutes(mux, manager)
+	server.productHandler.RegisterRoutes(mux, manager)
+	server.userHandler.RegisterRoutes(mux, manager)
 
 	
-	addr := ":" + strconv.Itoa(cnf.HttpPort)
+	addr := ":" + strconv.Itoa(server.cnf.HttpPort)
 	fmt.Println("Server is running on port", addr)
 	err := http.ListenAndServe(addr, wrappedMux) // failed to start the server
 	if err != nil {
