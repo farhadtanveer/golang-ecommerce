@@ -49,7 +49,7 @@ func Delete(id int) {
 	productList = tempList
 }
 
-func init() {
+func generateInitialProducts() {
 	prd1 := Product{
 		ID:          1,
 		Title:       "Product 1",
