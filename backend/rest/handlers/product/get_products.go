@@ -1,11 +1,15 @@
 package product
 
 import (
-	"ecommerce/database"
 	"ecommerce/util"
 	"net/http"
 )
 
 func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
-	util.SendData(w, database.List(), 200) // Send the product list as JSON response
+	productList, err := h.productRepo.List()
+	if err != nil {
+		http.Error(w, "Error fetching products", http.StatusInternalServerError)
+		return
+	}
+	util.SendData(w, http.StatusOK, productList) // Send the product list as JSON response
 }

@@ -1,24 +1,41 @@
 package product
 
 import (
-	"ecommerce/database"
+	"ecommerce/repo"
 	"ecommerce/util"
 	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
+type ReqCreateProduct struct {
+	ID          int     `json:"id"`
+	Title       string  `json:"title"`
+	Price       float64 `json:"price"`
+	Description string  `json:"description"`
+	ImgURL      string  `json:"imgURL"`
+}
+
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	var newProduct database.Product
+	var req ReqCreateProduct
 
 	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&newProduct)
+	err := decoder.Decode(&req)
 
 	if err != nil {
 		fmt.Println("Error decoding JSON:", err)
 	}
 
-	createdProduct := database.Store(newProduct)
+	createdProduct, err := h.productRepo.Create(repo.Product{
+		Title:       req.Title,
+		Price:       req.Price,
+		Description: req.Description,
+		ImgURL:      req.ImgURL,
+	})
+	if err != nil {
+		util.SendError(w, http.StatusInternalServerError, "Error creating product")
+		return
+	}
 
-	util.SendData(w, createdProduct, 200) 
+	util.SendData(w, http.StatusCreated,createdProduct) 
 }
