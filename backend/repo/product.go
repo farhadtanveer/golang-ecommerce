@@ -34,7 +34,7 @@ func NewProductRepo(db *sqlx.DB) ProductRepo {
 	}
 }
 
-func (r productRepo) Create(p Product) (*Product, error) {
+func (r *productRepo) Create(p Product) (*Product, error) {
 	query := `
 		INSERT INTO products (
 			title,
@@ -42,22 +42,18 @@ func (r productRepo) Create(p Product) (*Product, error) {
 			description,
 			img_url
 		)
-		VALUES (
-			:title,
-			:price,
-			:description,
-			:img_url
-		)
+		VALUES ($1, $2, $3, $4)
 		RETURNING id
 	`
-		row :=r.db.QueryRow(query, p.Title, p.Price, p.Description, p.ImgURL)
-		err := row.Scan(&p.ID)
-		if err != nil {
-			return nil, err
-		}
-		return &p, nil
 
+	err := r.db.QueryRow(query, p.Title, p.Price, p.Description, p.ImgURL).Scan(&p.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &p, nil
 }
+
 func (r *productRepo) Get(id int) (*Product, error) {
 	var prd Product
 	query := `SELECT * FROM products WHERE id=$1`
