@@ -36,10 +36,7 @@ func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		util.SendError(w, http.StatusInternalServerError, "Error creating user")
 		return
 	}
-	newUser := repo.User{
-		
-
-	createdUser := newUser.Store()
-	util.SendData(w, createdUser, http.StatusCreated)
+	
+	util.SendData(w, http.StatusCreated, usr)
 
 }
