@@ -9,3 +9,11 @@ CREATE TABLE users (
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+SELECT * FROM users;
+
+# update user
+UPDATE users SET 
+    first_name = 'John', 
+    last_name = 'Doe' 
+WHERE id = 2;
+  

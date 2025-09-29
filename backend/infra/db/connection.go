@@ -6,7 +6,7 @@ import (
 )
 
 func GetConnectionString() string {
-	return "user=postgres password=123456 host=localhost port=5432 dbname=ecommerce sslmode=disable" 
+	return "user=postgres password=12345678 host=localhost port=5432 dbname=ecommerce sslmode=disable" 
 }
 
 func NewConnection() (*sqlx.DB, error) {

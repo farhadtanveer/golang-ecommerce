@@ -21,7 +21,7 @@ func Serve() {
 	middlewares := middleware.NewMiddlewares(cnf) // Initialize middlewares
 
 	// Initialize repositories
-	productRepo := repo.NewProductRepo() 
+	productRepo := repo.NewProductRepo(dbCon) 
 	userRepo := repo.NewUserRepo(dbCon)
 
 	// Initialize handlers
