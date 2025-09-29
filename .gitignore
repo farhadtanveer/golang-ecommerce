@@ -1,0 +1,18 @@
+# Ignore environment files
+.env
+backend/.env
+frontend/.env
+
+# Node / React stuff
+frontend/node_modules/
+frontend/.next/
+frontend/dist/
+
+# Go stuff
+backend/bin/
+backend/*.exe
+backend/*.out
+backend/*.log
+
+# OS files
+.DS_Store
