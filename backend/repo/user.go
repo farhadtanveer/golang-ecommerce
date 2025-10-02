@@ -32,7 +32,7 @@ func NewUserRepo(db *sqlx.DB) UserRepo {
 	}
 }
 
-func (r userRepo) Create(user User) (*User, error) {
+func (r *userRepo) Create(user User) (*User, error) {
 	 query := `
         INSERT INTO users (
 			first_name, 
@@ -64,7 +64,7 @@ func (r userRepo) Create(user User) (*User, error) {
     return &user, nil
 }
 
-func (r userRepo) Find(email, pass string) (*User, error) {
+func (r *userRepo) Find(email, pass string) (*User, error) {
 	query := `
 		SELECT 
 			id, 

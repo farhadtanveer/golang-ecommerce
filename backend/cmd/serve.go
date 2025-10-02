@@ -9,6 +9,7 @@ import (
 	"ecommerce/rest/handlers/user"
 	middleware "ecommerce/rest/middleswares"
 	"fmt"
+	"os"
 )
 
 func Serve() {
@@ -23,6 +24,12 @@ func Serve() {
 	// Initialize repositories
 	productRepo := repo.NewProductRepo(dbCon) 
 	userRepo := repo.NewUserRepo(dbCon)
+
+	err = db.MigrateDB(dbCon, "./migrations") // Run database migrations
+	if err != nil {
+		fmt.Println("Failed to run migrations:", err)
+		os.Exit(1)
+	}
 
 	// Initialize handlers
 	productHandler := product.NewHandler(middlewares, productRepo)
