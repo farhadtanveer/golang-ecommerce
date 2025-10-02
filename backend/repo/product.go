@@ -86,11 +86,11 @@ func (r *productRepo) Update(product Product) (*Product, error) {
 	query := `
 		UPDATE products
 		SET 
-			title = :title,
-			price = :price,
-			description = :description,
-			img_url = :img_url
-		WHERE id = :id
+			title = $1,
+			price = $2,
+			description = $3,
+			img_url = $4
+		WHERE id = $5
 	`
 	_, err := r.db.NamedExec(query, product)
 	if err != nil {
