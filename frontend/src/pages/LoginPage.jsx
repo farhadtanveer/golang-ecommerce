@@ -32,7 +32,8 @@ const LoginPage = () => {
       const data = await response.json();
       // Assuming your Go API returns a token and user data upon successful login
       // Example: { token: "jwt_token_here", user: { id: 1, email: "test@example.com", IsShopOwner: true } }
-      login(data.token, data.user);
+      login(data.token, data);
+
       setMessage({ type: "success", text: "Login successful!" });
       navigate("/"); // Redirect to home after successful login
     } catch (error) {
