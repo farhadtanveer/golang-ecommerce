@@ -3,17 +3,17 @@ package user
 import "ecommerce/domain"
 
 type service struct {
-	userRepo UserRepo
+	usrRepo UserRepo
 }
 
-func NewService(userRepo UserRepo) Service {
+func NewService(usrRepo UserRepo) Service {
 	return &service{
-		userRepo: userRepo,
+		usrRepo: usrRepo,
 	}
 }
 
 func (svc *service) Create(user domain.User) (*domain.User, error) {
-	usr, err := svc.userRepo.Create(user)
+	usr, err := svc.usrRepo.Create(user)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ func (svc *service) Create(user domain.User) (*domain.User, error) {
 }
 
 func (svc *service) Find(email string, pass string) (*domain.User, error) {
-	usr, err := svc.userRepo.Find(email, pass)
+	usr, err := svc.usrRepo.Find(email, pass)
 	if err != nil {
 		return nil, err
 	}

@@ -2,12 +2,12 @@ package user
 
 import (
 	"ecommerce/domain"
-	UserHandler "ecommerce/rest/handlers/user"
+	userHandler "ecommerce/rest/handlers/user"
 )
 
 
 type Service interface {
-	UserHandler.Service // embedding
+	userHandler.Service // embedding
 }
 
 type UserRepo interface {

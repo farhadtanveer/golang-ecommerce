@@ -5,9 +5,11 @@ import (
 	"ecommerce/infra/db"
 	"ecommerce/repo"
 	"ecommerce/rest"
-	"ecommerce/rest/handlers/product"
-	"ecommerce/rest/handlers/user"
+	prdctHandler "ecommerce/rest/handlers/product"
+	usrHandler "ecommerce/rest/handlers/user"
 	middleware "ecommerce/rest/middleswares"
+	"ecommerce/user"
+
 	"fmt"
 	"os"
 )
@@ -21,9 +23,12 @@ func Serve() {
 
 	middlewares := middleware.NewMiddlewares(cnf) // Initialize middlewares
 
-	// Initialize repositories
+	// Initialize repositories / repos
 	productRepo := repo.NewProductRepo(dbCon) 
 	userRepo := repo.NewUserRepo(dbCon)
+
+	// domains
+	usrSvc := user.NewService(userRepo)
 
 	err = db.MigrateDB(dbCon, "./migrations") // Run database migrations
 	if err != nil {
@@ -32,8 +37,8 @@ func Serve() {
 	}
 
 	// Initialize handlers
-	productHandler := product.NewHandler(middlewares, productRepo)
-	userHandler := user.NewHandler(cnf, userRepo)
+	productHandler := prdctHandler.NewHandler(middlewares, productRepo)
+	userHandler := usrHandler.NewHandler(cnf, usrSvc)
 
 	// Start the server
 	server := rest.NewServer(cnf, productHandler, userHandler)      
