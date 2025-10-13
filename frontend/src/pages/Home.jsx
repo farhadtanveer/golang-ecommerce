@@ -109,7 +109,7 @@ const Home = () => {
                   className="border-b border-gray-200 hover:bg-gray-100"
                 >
                   <td className="py-3 px-4">{product.id}</td>
-                  <td className="py-3 px-4">{product.name}</td>
+                  <td className="py-3 px-4">{product.title}</td>
                   <td className="py-3 px-4">{product.description}</td>
                   <td className="py-3 px-4">${product.price.toFixed(2)}</td>
                   {role === "admin" && (

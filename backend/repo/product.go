@@ -59,7 +59,10 @@ func (r *productRepo) Get(id int) (*domain.Product, error) {
 }
 func (r *productRepo) List() ([]*domain.Product, error) {
 	var productList []*domain.Product
-	query := `SELECT * FROM products`
+	query := `
+SELECT id, title, price, description, img_url
+FROM products
+`
 	err := r.db.Select(&productList, query)
 	if err != nil {
 		return nil, err
