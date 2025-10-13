@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const AddItem = () => {
-  const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState(null);
@@ -31,7 +31,7 @@ const AddItem = () => {
       return;
     }
 
-    const newProduct = { name, description, price: parseFloat(price) };
+    const newProduct = { title, description, price: parseFloat(price) };
 
     try {
       const response = await fetch("http://localhost:8080/products", {
@@ -48,7 +48,7 @@ const AddItem = () => {
       }
 
       setMessage({ type: "success", text: "Product added successfully!" });
-      setName("");
+      setTitle("");
       setDescription("");
       setPrice("");
       navigate("/"); // Redirect to home after successful add
@@ -81,17 +81,17 @@ const AddItem = () => {
         >
           <div className="mb-4">
             <label
-              htmlFor="name"
+              htmlFor="title"
               className="block text-gray-700 text-sm font-bold mb-2"
             >
-              Name:
+              Title:
             </label>
             <input
               type="text"
-              id="name"
+              id="title"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               required
             />
           </div>
